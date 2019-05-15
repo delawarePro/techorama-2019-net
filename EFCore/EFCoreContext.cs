@@ -7,13 +7,20 @@ namespace EFCore
 {
     public class EFCoreContext : DbContext
     {
+        private string ConnectionString { get; }
+
         public DbSet<Product> Products { get; set; }
+
+        public EFCoreContext(string connectionString)
+        {
+            ConnectionString = connectionString;
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Data Source=(LocalDb)\ProjectsV13;Initial Catalog=TechoramaEFCore;Integrated Security=SSPI;");
+                optionsBuilder.UseSqlServer(ConnectionString);
             }
 
             // Don't allow client side evalutation.

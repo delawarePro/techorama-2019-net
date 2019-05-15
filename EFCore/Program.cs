@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MoreLinq;
 using Shared.DataGeneration;
 using Shared.Model;
@@ -15,21 +16,23 @@ namespace EFCore
     {
         static void Main(string[] args)
         {
-            using (var context = new EFCoreContext())
-            {
-                // Force database recreation.
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
 
+            using (var context = new EFCoreContext(config.GetConnectionString(nameof(EFCoreContext))))
+            {
+                // Ensure context is initialized.
+                ClearData(context);
                 context.Products.FirstOrDefault();
                 Console.WriteLine("Database initialized.");
 
-                //WriteAndReadProducts(context, nofProducts: 100, nofProperties: 25);
+                //WriteAndReadProducts(context, nofProducts: 10, nofProperties: 25);
 
                 //QueryProducts(context);
 
-                //context.EnsureUpsertSproc();
-                //UpsertProductsBatched(context, nofProducts: 10000, nofProperties: 25);
+                context.EnsureUpsertSproc();
+                UpsertProductsBatched(context, nofProducts: 1000, nofProperties: 25);
             }
 
             Console.ReadLine();
@@ -138,6 +141,14 @@ namespace EFCore
                 .ToList();
 
             Console.WriteLine($"Queried {results.Count} results in: {sw.Elapsed}");
+        }
+
+        private static void ClearData(EFCoreContext context)
+        {
+            context.Database.ExecuteSqlCommand(@"
+                TRUNCATE TABLE ProductProperties
+                DELETE FROM Products
+            ");
         }
     }
 }

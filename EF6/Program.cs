@@ -14,17 +14,14 @@ namespace EF6
         {
             using (var context = new EF6Context())
             {
-                // Force database recreation.
-                context.Database.Delete();
-                context.Database.CreateIfNotExists();
-
                 // Ensure context is initialized.
+                ClearData(context);
                 context.Products.FirstOrDefault();
                 Console.WriteLine("Database initialized.");
 
-                WriteAndReadProducts(context, nofProducts: 100, nofProperties: 25);
+                WriteAndReadProducts(context, nofProducts: 10, nofProperties: 25);
 
-                //QueryProducts(context);
+                QueryProducts(context);
             }
 
             Console.ReadLine();
@@ -79,6 +76,14 @@ namespace EF6
                 .ToList();
 
             Console.WriteLine($"Queried {results.Count} results in: {sw.Elapsed}");
+        }
+
+        private static void ClearData(EF6Context context)
+        {
+            context.Database.ExecuteSqlCommand(@"
+                TRUNCATE TABLE ProductProperties
+                DELETE FROM Products
+            ");
         }
     }
 }

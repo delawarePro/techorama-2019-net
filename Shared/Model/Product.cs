@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shared.Model
 {
+    [Table("Products", Schema = "dbo")]
     public class Product
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

@@ -55,7 +55,7 @@ BEGIN
 	;
 	
 	MERGE
-        dbo.ProductProperty WITH (HOLDLOCK) AS target -- WITH (HOLDLOCK): http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
+        dbo.ProductProperties WITH (HOLDLOCK) AS target -- WITH (HOLDLOCK): http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
     
         USING (SELECT * FROM @Properties) source
     

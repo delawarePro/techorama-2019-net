@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shared.Model
 {
+    [Table("ProductProperties", Schema = "dbo")]
     public class ProductProperty
     {
         [Key, Column(Order = 1)]
