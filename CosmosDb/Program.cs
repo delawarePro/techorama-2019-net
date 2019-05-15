@@ -39,7 +39,7 @@ namespace CosmosDb
             var collection = await RecreateCollection(client, dbName, collectionName);
             var bulkExecutor = await CreateBulkExecutor(collection);
 
-            await WriteAndReadProducts(bulkExecutor, 1000, 25);
+            await WriteAndReadProducts(bulkExecutor, 5000, 25);
         }
 
         private static async Task WriteAndReadProducts(IBulkExecutor bulkExecutor, int nofProducts, int nofProperties)

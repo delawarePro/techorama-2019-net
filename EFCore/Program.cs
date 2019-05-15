@@ -27,7 +27,7 @@ namespace EFCore
                 context.Products.FirstOrDefault();
                 Console.WriteLine("Database initialized.");
 
-                //WriteAndReadProducts(context, nofProducts: 10, nofProperties: 25);
+                //WriteAndReadProducts(context, nofProducts: 500, nofProperties: 25);
 
                 //QueryProducts(context);
 
