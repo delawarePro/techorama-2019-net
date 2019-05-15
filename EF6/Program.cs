@@ -16,13 +16,11 @@ namespace EF6
             using (var context = new EF6Context())
             {
                 // Ensure context is initialized.
-                //ClearData(context);
+                ClearData(context);
                 context.Products.FirstOrDefault();
                 Console.WriteLine("Database initialized.");
 
-                WriteAndReadProducts(context, nofProducts: 20, nofProperties: 25);
-
-                QueryProducts(context);
+                WriteAndReadProducts(context, nofProducts: 100, nofProperties: 25);
             }
 
             Console.ReadLine();

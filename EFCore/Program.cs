@@ -87,12 +87,12 @@ namespace EFCore
             Console.WriteLine($"Read {counter} products with {nofProperties} properties in: {sw.Elapsed}");
         }
 
-        private static void UpsertProductsBatched(EFCoreContext context, int nofProducts, int nofProperties)
+        private static void UpsertProductsBatched(EFCoreContext context, int nofProducts, int nofProperties, int batchSize = 1000)
         {
             Console.WriteLine("Writing products...");
             var sw = Stopwatch.StartNew();
             {
-                foreach (var batch in ProductGenerator.GenerateProducts(nofProducts, nofProperties).Batch(1000))
+                foreach (var batch in ProductGenerator.GenerateProducts(nofProducts, nofProperties).Batch(batchSize))
                 {
                     var productsTable = new DataTable();
                     productsTable.Columns.Add("Id", typeof(string));
