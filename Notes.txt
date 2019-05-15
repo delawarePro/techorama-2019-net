@@ -1,0 +1,37 @@
+SQL Server DB: 400: €504 / month
+Cosmos DB RU: 8700 < €504 / 30d
+
+EF6
+- Write 100: 2.8s (840rps)
+- Write 500: 14.4s (852rps)
+- Write 1000: 30.5s (851rps)
+- Read 100: 93ms
+- Read 500: 330ms
+- Read 1000: 681ms
+- Query 100k: 235ms
+- Query 2000k: 3ms
+
+EFCore
+- Write 100: 1.7s (1513rps)
+- Write 500: 4.1s (3143rps)
+- Write 1000: 8.3s (3118rps)
+- Read 100: 121ms
+- Read 500: 261ms
+- Read 1000: 517ms
+
+- Write with sproc 1000: 0.9s (27474)
+- Write with sproc 10000: 11.4s (22729rps)
+
+- Query 100k: 1.4s
+- Query 2000k: 15s
+
+Cosmos (8700RU)
+- Write 1000: 2.3s (11263rps)
+- Write 5000: 10.4s (12405rps)
+
+Cosmos (50k RU)
+- Write 20k: 12s (43128rps)
+
+Techoram db server
+User: TechoAdmin
+Pwd: pqFQG2BV63VU57zE
