@@ -72,9 +72,12 @@ BEGIN
             UPDATE SET
                 target.Locale = source.Locale,
 				target.Value= source.Value
-
-		-- Remove redundant properties.
-		WHEN NOT MATCHED BY SOURCE AND target.ProductId IN (SELECT Id FROM @Products) THEN
-			DELETE
 	;
+
+	-- Remove redundant properties.
+	DELETE prop
+	FROM ProductProperties prop
+		INNER JOIN @Products newP ON newP.Id = prop.ProductId
+		LEFT JOIN @Properties newProp ON newProp.ProductId = prop.ProductId AND newProp.Name = prop.Name
+	WHERE newProp.ProductId IS NULL
 END
