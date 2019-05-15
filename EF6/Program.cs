@@ -1,4 +1,5 @@
-﻿using Shared.DataGeneration;
+﻿using MoreLinq;
+using Shared.DataGeneration;
 using Shared.Model;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,11 @@ namespace EF6
             using (var context = new EF6Context())
             {
                 // Ensure context is initialized.
-                ClearData(context);
+                //ClearData(context);
                 context.Products.FirstOrDefault();
                 Console.WriteLine("Database initialized.");
 
-                WriteAndReadProducts(context, nofProducts: 10, nofProperties: 25);
+                WriteAndReadProducts(context, nofProducts: 20, nofProperties: 25);
 
                 QueryProducts(context);
             }
@@ -27,15 +28,33 @@ namespace EF6
             Console.ReadLine();
         }
 
-        private static void WriteAndReadProducts(EF6Context context, int nofProducts, int nofProperties)
+        private static void WriteAndReadProducts(EF6Context context, int nofProducts, int nofProperties, int batchSize = 100)
         {
             Console.WriteLine("Writing products...");
             var sw = Stopwatch.StartNew();
             {
-                context.Products.AddRange(
-                    ProductGenerator.GenerateProducts(nofProducts, nofProperties)
-                );
-                context.SaveChanges();
+                foreach (var batch in ProductGenerator.GenerateProducts(nofProducts, nofProperties).Batch(batchSize))
+                {
+                    // Read existing from database.
+                    var ids = batch.Select(x => x.Id).ToArray();
+                    var existingSetFromDb = context.Products
+                        .Include(x => x.Properties)
+                        .Where(x => ids.Contains(x.Id)).ToList();
+
+                    // Update existing ones.
+                    var existingSetInBatch = new List<Product>();
+                    foreach(var existing in existingSetFromDb)
+                    {
+                        var update = batch.First(x => x.Id.Equals(existing.Id, StringComparison.OrdinalIgnoreCase));
+                        existing.UpdateFrom(update);
+                        existingSetInBatch.Add(update);
+                    }
+
+                    // Add new ones.
+                    context.Products.AddRange(batch.Except(existingSetInBatch));
+
+                    context.SaveChanges();
+                }
             }
             sw.Stop();
             Console.WriteLine($"Written {nofProducts} products with {nofProperties} properties in: {sw.Elapsed}");

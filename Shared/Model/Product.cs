@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace Shared.Model
 {
@@ -28,5 +29,44 @@ namespace Shared.Model
         public virtual ICollection<ProductProperty> Properties { get; set; }
 
         public string Partition { get; set; }
+
+        public Product UpdateFrom(Product update)
+        {
+            Code = update.Code;
+            Name = update.Name;
+            StartDate = update.StartDate;
+            EndDate = update.EndDate;
+            IsActive = update.IsActive;
+            IsBuyable = update.IsBuyable;
+            MinOrderQuantity = update.MinOrderQuantity;
+            MaxOrderQuantity = update.MaxOrderQuantity;
+
+            // Merge property list.
+            var matchedProperties = new List<ProductProperty>();
+            foreach (var updateProperty in (update.Properties ?? Enumerable.Empty<ProductProperty>()))
+            {
+                var existing = Properties?.FirstOrDefault(x =>
+                    x.ProductId.Equals(updateProperty.ProductId, StringComparison.OrdinalIgnoreCase)
+                    && x.Name.Equals(updateProperty.Name, StringComparison.Ordinal));
+                if (existing != null)
+                {
+                    existing.UpdateFrom(updateProperty);
+                    matchedProperties.Add(existing);
+                }
+                else
+                {
+                    Properties.Add(updateProperty);
+                    matchedProperties.Add(updateProperty);
+                }
+            }
+
+            // Remove unmatched properties.
+            foreach(var unmatched in Properties.Except(matchedProperties).ToArray())
+            {
+                Properties.Remove(unmatched);
+            }
+
+            return this;
+        }
     }
 }

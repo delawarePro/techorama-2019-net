@@ -18,5 +18,13 @@ namespace Shared.Model
 
         public string Locale { get; set; }
         public string Value { get; set; }
+
+        public ProductProperty UpdateFrom(ProductProperty update)
+        {
+            Locale = update.Locale;
+            Value = update.Value;
+
+            return this;
+        }
     }
 }
