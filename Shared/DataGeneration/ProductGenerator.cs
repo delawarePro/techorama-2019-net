@@ -9,7 +9,7 @@ namespace Shared.DataGeneration
     {
         public static IEnumerable<Product> GenerateProducts(int nofProducts, int nofProperties)
         {
-            return Enumerable.Range(0, nofProducts).Select(x => GenerateProduct(x, nofProperties));
+            return Enumerable.Range(1, nofProducts).Select(x => GenerateProduct(x, nofProperties));
         }
 
         public static Product GenerateProduct(int sequence, int nofProperties)

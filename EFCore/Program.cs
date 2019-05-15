@@ -23,16 +23,16 @@ namespace EFCore
             using (var context = new EFCoreContext(config.GetConnectionString(nameof(EFCoreContext))))
             {
                 // Ensure context is initialized.
-                //ClearData(context);
+                ClearData(context);
                 context.Products.FirstOrDefault();
                 Console.WriteLine("Database initialized.");
 
-                WriteAndReadProducts(context, nofProducts: 20, nofProperties: 25);
+                //WriteAndReadProducts(context, nofProducts: 20, nofProperties: 25);
 
                 //QueryProducts(context);
 
-                //context.EnsureUpsertSproc();
-                //UpsertProductsBatched(context, nofProducts: 1000, nofProperties: 25);
+                context.EnsureUpsertSproc();
+                UpsertProductsBatched(context, nofProducts: 1000, nofProperties: 25);
             }
 
             Console.ReadLine();

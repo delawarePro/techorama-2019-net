@@ -72,5 +72,9 @@ BEGIN
             UPDATE SET
                 target.Locale = source.Locale,
 				target.Value= source.Value
+
+		-- Remove redundant properties.
+		WHEN NOT MATCHED BY SOURCE AND target.ProductId IN (SELECT Id FROM @Products) THEN
+			DELETE
 	;
 END
