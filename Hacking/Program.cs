@@ -4,14 +4,6 @@ using System.Linq;
 
 namespace Hacking
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World!");
-        }
-    }
-
     public interface IDontDoThisAtHomeProductRepository
     {
         IEnumerable<Product> GetProducts();
@@ -27,6 +19,33 @@ namespace Hacking
         IQueryable<Product> GetProducts();
         Product GetProductById(string productId);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public interface IProductRepository
     {

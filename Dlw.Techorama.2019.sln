@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hacking", "Hacking\Hacking.csproj", "{6810C5E4-5514-4035-BE20-A74D6C9204AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosDb", "CosmosDb\CosmosDb.csproj", "{25B8A7F9-8572-4D17-9108-7133147BAE9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosDb", "CosmosDb\CosmosDb.csproj", "{25B8A7F9-8572-4D17-9108-7133147BAE9E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7AD27C4A-076D-4A10-AFD6-D780001CD486}"
+	ProjectSection(SolutionItems) = preProject
+		DemoScript.txt = DemoScript.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

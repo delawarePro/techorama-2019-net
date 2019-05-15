@@ -1,0 +1,107 @@
+DEMO 1: perf EF vs EFCore
+=========================
+Wim: Hey Stijn, I need to import some products into my database so I can start building an ecommerce site.
+	Can you please quickly write me an import.
+
+Stijn: Sure, I thought you might asked something like that so I quickly cooked something up.
+Stijn explains	
+- WriteAndReadProducts test harnass
+- Starts implementing update without merge
+- Tests 100 products
+
+Wim: Nice, but are you sure that properties that are already in the database and are not provided by the source anymore,
+	will be removed?
+
+Stijn: Right, I wasn't aware it had to be production ready!
+	Ok shouldn't be too hard...
+	Bummer, I need to merge all this stuff.
+Stijn copies merge code from EFCore project and explains merge process.
+Stijn tests 100 products again.
+
+Wim: Cool, but I'm a retailer, so I need to be able to process massive product set updates.
+	I have peaks of 800k product updates and I want to update the site asap, time is money, you know.
+
+Stijn: Ok, let's see what happens with 1000 products.
+
+Wim: This is taking forever, can't we just switch to a better and faster framework?
+
+Stijn: I hear EF Core is the cool kid in town nowadays. Let's test that.
+Stijn tests with EF Core and 1000 products.
+
+Wim: Now we're talking, I'll calculate whether that's sufficient.
+	I not only need to load products, but I need to monitor some statistics as well.
+	I'd like to how many products with a specific characteristics are active, so I'm sure the products are available on the site.
+	Can you test querying this model for me please.
+
+Stijn: Take it easy, shouldn't be too hard, now that I have this cool new framework.
+Stijn explains QueryProducts method and runs it.
+
+Wim: That was easy, but are we sure this really works on production like data.
+	I prepared an acceptance database with a couple of million products.
+	Could you test that one please?
+
+Stijn: Having no faith, are we?
+Stijn tests query on QA db..
+
+Stijn: Oh shit, what's happening here.
+	Let me quickly try on the our good old classic Entity Framework
+	...
+	Hm this works.
+
+Wim explains what's happening and continues with slides
+
+
+DEMO 2: ORM abstraction
+=======================
+Wim: Stijn, I have a great idea, let's abstract to ORM so that we can use different toolsets for different user-stories.
+	I've seen some examples on Microsofts documentation site.
+
+Stijn: Hm, whenever you have great ideas, I become very sceptical.
+	But let me have a look at those examples.
+Stijn opens up 'hacking' project.
+Stijn: Hm, I think we should be very critical about these. 
+	Otherwise you'll be throwing all kind of weird business requirements at me and I will not be able to cope.
+	Let me write a new one.
+
+Stijn takes the GetProductById over.
+Stijn explains why he doesn't like to use IEnumerable (lots of misuses, DA will typically cache everything in memory)
+
+Wim: Ok, but can't you use IQueryable, it's designed to write queries with deferred execution.
+
+Stijn explains why this is a bad idea
+	- leaky abstraction
+	- e.g. Query issue we just had
+
+Stijn: let's just do something straightforward
+Stijn: writes 2 query methods
+
+Wim: Surely you don't have any issue with the add, update and delete methods
+
+Stijn: These seem simplistic to me.
+Stijn explains
+	- Add/Update: client has to know the state of the db
+	- No batch suppport resulting in chatty interfaces.
+
+Wim: alright, if we use this abstraction, we can basically put anything we like behind it.
+Wim continues with slides
+
+
+DEMO 3: Upsert sproc
+====================
+Wim: I just did some calculations and it seems that importing products with EF Core is still too slow.
+	If I calculate correctly, 800k would still almost take 2 hours.
+
+Stijn: You want to push the limits again...
+	Let me see what I can do.
+	I'm not bound anymore by the toolset, because my abstraction allows me to do whatever I want.
+	Let's try to write the simplest low-level upsert.
+Stijn explains the UpsertSproc.sql
+	Runs test for 10k
+
+Wim: That's way better;
+	If I calculate this correctly, it would take about 15 minutes.
+Wim continues with the slides.
+
+
+DEMO 4: Cosmos
+==============
