@@ -31,7 +31,8 @@ namespace Shared.DataGeneration
                     (DateTime?)null),
                 MinOrderQuantity = Randomizer.Randomize(Randomizer.RandomInt(1, 10), (int?)null),
                 MaxOrderQuantity = Randomizer.Randomize(Randomizer.RandomInt(10, 100), (int?)null),
-                Properties = GenerateProductProperties(id, nofProperties)
+                Properties = GenerateProductProperties(id, nofProperties),
+                Partition = sequence.ToString()
             };
         }
 

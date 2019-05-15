@@ -25,5 +25,7 @@ namespace Shared.Model
         public int? MaxOrderQuantity { get; set; }
 
         public virtual ICollection<ProductProperty> Properties { get; set; }
+
+        public string Partition { get; set; }
     }
 }

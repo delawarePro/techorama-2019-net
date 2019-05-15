@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCore", "EFCore\EFCore.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF6", "EF6\EF6.csproj", "{4DD51562-E4AF-4B1B-8431-B0BE581FAD50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{513DC850-F5F3-42B8-A5A5-2782F95D9BB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{513DC850-F5F3-42B8-A5A5-2782F95D9BB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hacking", "Hacking\Hacking.csproj", "{6810C5E4-5514-4035-BE20-A74D6C9204AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hacking", "Hacking\Hacking.csproj", "{6810C5E4-5514-4035-BE20-A74D6C9204AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosDb", "CosmosDb\CosmosDb.csproj", "{25B8A7F9-8572-4D17-9108-7133147BAE9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{6810C5E4-5514-4035-BE20-A74D6C9204AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6810C5E4-5514-4035-BE20-A74D6C9204AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6810C5E4-5514-4035-BE20-A74D6C9204AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25B8A7F9-8572-4D17-9108-7133147BAE9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25B8A7F9-8572-4D17-9108-7133147BAE9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25B8A7F9-8572-4D17-9108-7133147BAE9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25B8A7F9-8572-4D17-9108-7133147BAE9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

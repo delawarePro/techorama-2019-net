@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shared.Model
@@ -7,6 +8,7 @@ namespace Shared.Model
     {
         [Key, Column(Order = 1)]
         [MaxLength(100)]
+        [JsonIgnore]
         public string ProductId { get; set; }
 
         [Key, Column(Order = 2)]
