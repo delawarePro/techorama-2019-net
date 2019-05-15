@@ -36,12 +36,10 @@ namespace CosmosDb
             const string collectionName = "2019";
 
             var client = CreateDocumentClient();
-            //await DeleteDb(client, dbName);
-            //var collection = await EnsureDbAndCollection(client, dbName, collectionName);
-            var collection = await GetCollection(client, dbName, collectionName);
+            var collection = await RecreateCollection(client, dbName, collectionName);
             var bulkExecutor = await CreateBulkExecutor(collection);
 
-            await WriteAndReadProducts(bulkExecutor, 5000, 25);
+            await WriteAndReadProducts(bulkExecutor, 1000, 25);
         }
 
         private static async Task WriteAndReadProducts(IBulkExecutor bulkExecutor, int nofProducts, int nofProperties)
@@ -99,25 +97,17 @@ namespace CosmosDb
             return bulkExectuor;
         }
 
-        private static async Task DeleteDb(IDocumentClient client, string db)
+        private static async Task<DocumentCollection> RecreateCollection(IDocumentClient client, string db, string collection)
         {
-            var dbUri = UriFactory.CreateDatabaseUri(db);
-
             try
             {
-                if ((await client.ReadDatabaseAsync(dbUri)) != null)
-                    await client.DeleteDatabaseAsync(UriFactory.CreateDatabaseUri(db));
+                await client.DeleteDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(db, collection));
             }
-            catch (DocumentClientException)
+            catch
             {
-                // Read throws when db not present.
+                // Not found throws.
             }
-        }
-
-        private static async Task<DocumentCollection> EnsureDbAndCollection(IDocumentClient client, string db, string collection)
-        {
-            await client.CreateDatabaseIfNotExistsAsync(new Database { Id = db });
-            return await client.CreateDocumentCollectionIfNotExistsAsync(
+            return await client.CreateDocumentCollectionAsync(
                 UriFactory.CreateDatabaseUri(db),
                 new DocumentCollection
                 {
@@ -129,16 +119,7 @@ namespace CosmosDb
                             "/partition"
                         }
                     }
-                },
-                new RequestOptions
-                {
-                    OfferThroughput = 150000
                 });
-        }
-
-        private static async Task<DocumentCollection> GetCollection(IDocumentClient client, string db, string collection)
-        {
-            return await client.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(db, collection));
         }
     }
 }
