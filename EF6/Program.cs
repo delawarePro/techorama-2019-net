@@ -13,6 +13,7 @@ namespace EF6
     {
         static void Main(string[] args)
         {
+            Console.WriteLine(typeof(Program).FullName);
             using (var context = new EF6Context())
             {
                 // Ensure context is initialized.
@@ -20,7 +21,7 @@ namespace EF6
                 context.Products.FirstOrDefault();
                 Console.WriteLine("Database initialized.");
 
-                WriteAndReadProducts(context, nofProducts: 100, nofProperties: 25);
+                WriteAndReadProducts(context, nofProducts: 50, nofProperties: 25);
             }
 
             Console.ReadLine();
@@ -33,24 +34,8 @@ namespace EF6
             {
                 foreach (var batch in ProductGenerator.GenerateProducts(nofProducts, nofProperties).Batch(batchSize))
                 {
-                    // Read existing from database.
-                    var ids = batch.Select(x => x.Id).ToArray();
-                    var existingSetFromDb = context.Products
-                        .Include(x => x.Properties)
-                        .Where(x => ids.Contains(x.Id)).ToList();
-
-                    // Update existing ones.
-                    var existingSetInBatch = new List<Product>();
-                    foreach(var existing in existingSetFromDb)
-                    {
-                        var update = batch.First(x => x.Id.Equals(existing.Id, StringComparison.OrdinalIgnoreCase));
-                        existing.UpdateFrom(update);
-                        existingSetInBatch.Add(update);
-                    }
-
                     // Add new ones.
-                    context.Products.AddRange(batch.Except(existingSetInBatch));
-
+                    context.Products.AddRange(batch);
                     context.SaveChanges();
                 }
             }
@@ -80,7 +65,6 @@ namespace EF6
             var sw = Stopwatch.StartNew();
 
             var results = context.Products
-                .Include(pd => pd.Properties)
                 .Where(pd => pd.Properties.Any(prop => prop.Name == "prop-20"
                     && prop.Value.StartsWith("Property value 20"))
                 )

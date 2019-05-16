@@ -15,9 +15,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosDb", "CosmosDb\Cosmos
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7AD27C4A-076D-4A10-AFD6-D780001CD486}"
 	ProjectSection(SolutionItems) = preProject
+		Demo1Snippets.txt = Demo1Snippets.txt
+		Demo4Snippets.txt = Demo4Snippets.txt
 		DemoScript.txt = DemoScript.txt
 		Notes.txt = Notes.txt
+		Results.txt = Results.txt
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo1", "Demo1", "{2A78225F-8B49-4B13-ADD5-794B8A0713DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo2", "Demo2", "{AB1AC312-B1F2-4234-9C9B-19F389AB0A24}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo3", "Demo3", "{D05051EC-D57C-40EE-BE79-96C54A31D9F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +57,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B1753F26-ED55-4709-9FF4-8667E661B534} = {AB1AC312-B1F2-4234-9C9B-19F389AB0A24}
+		{4DD51562-E4AF-4B1B-8431-B0BE581FAD50} = {2A78225F-8B49-4B13-ADD5-794B8A0713DD}
+		{25B8A7F9-8572-4D17-9108-7133147BAE9E} = {D05051EC-D57C-40EE-BE79-96C54A31D9F9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8EC7119C-27C2-4D7E-B4FC-41F12E047050}

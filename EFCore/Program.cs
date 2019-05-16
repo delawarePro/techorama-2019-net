@@ -16,6 +16,7 @@ namespace EFCore
     {
         static void Main(string[] args)
         {
+            Console.WriteLine(typeof(Program).FullName);
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
@@ -27,12 +28,7 @@ namespace EFCore
                 context.Products.FirstOrDefault();
                 Console.WriteLine("Database initialized.");
 
-                //WriteAndReadProducts(context, nofProducts: 20, nofProperties: 25);
-
-                //QueryProducts(context);
-
-                context.EnsureUpsertSproc();
-                UpsertProductsBatched(context, nofProducts: 1000, nofProperties: 25);
+                WriteAndReadProducts(context, nofProducts: 500, nofProperties: 25);
             }
 
             Console.ReadLine();
@@ -87,6 +83,39 @@ namespace EFCore
             Console.WriteLine($"Read {counter} products with {nofProperties} properties in: {sw.Elapsed}");
         }
 
+        private static void QueryProducts(EFCoreContext context)
+        {
+            var sw = Stopwatch.StartNew();
+
+            var results = context.Products
+                .Where(pd => pd.Properties.Any(prop => prop.Name == "prop-20"
+                    && prop.Value.StartsWith("Property value 20"))
+                )
+                .GroupBy(pd => pd.IsActive == null ? false : pd.IsActive)
+                .Select(g => new
+                {
+                    Active = g.Key,
+                    Count = g.Count()
+                })
+                .ToList();
+
+            Console.WriteLine($"Queried {results.Count} results in: {sw.Elapsed}");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // context.EnsureUpsertSproc();
+        // UpsertProductsBatched(context, nofProducts: 5000, nofProperties: 25);
         private static void UpsertProductsBatched(EFCoreContext context, int nofProducts, int nofProperties, int batchSize = 1000)
         {
             Console.WriteLine("Writing products...");
@@ -127,7 +156,7 @@ namespace EFCore
                         {
                             Value = productsTable,
                             TypeName = "dbo.ProductsUDT"
-                        }, 
+                        },
                         new SqlParameter("@properties", SqlDbType.Structured)
                         {
                             Value = propertiesTable,
@@ -139,26 +168,6 @@ namespace EFCore
             Console.WriteLine($"Written {nofProducts} products with {nofProperties} properties in: {sw.Elapsed}");
             var rps = (nofProducts + nofProducts * nofProperties) / sw.Elapsed.TotalSeconds;
             Console.WriteLine($"That is {rps:0.##} records/s");
-        }
-
-        private static void QueryProducts(EFCoreContext context)
-        {
-            var sw = Stopwatch.StartNew();
-
-            var results = context.Products
-                .Include(pd => pd.Properties)
-                .Where(pd => pd.Properties.Any(prop => prop.Name == "prop-20"
-                    && prop.Value.StartsWith("Property value 20"))
-                )
-                .GroupBy(pd => pd.IsActive == null ? false : pd.IsActive)
-                .Select(g => new
-                {
-                    Active = g.Key,
-                    Count = g.Count()
-                })
-                .ToList();
-
-            Console.WriteLine($"Queried {results.Count} results in: {sw.Elapsed}");
         }
 
         private static void ClearData(EFCoreContext context)

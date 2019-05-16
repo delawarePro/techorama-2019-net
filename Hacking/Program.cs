@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Hacking
 {
+    // Source: microsoft.com
     public interface IDontDoThisAtHomeProductRepository
     {
         IEnumerable<Product> GetProducts();
@@ -14,6 +15,7 @@ namespace Hacking
         void DeleteProduct(string productId);
     }
 
+    // Source: microsoft.com
     public interface IDontDoThisAtHomeEitherProductRepository
     {
         IQueryable<Product> GetProducts();

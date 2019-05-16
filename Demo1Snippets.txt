@@ -1,0 +1,29 @@
+// Read existing from database.
+var ids = batch.Select(x => x.Id).ToArray();
+var existingSetFromDb = context.Products
+    .Include(x => x.Properties)
+    .Where(x => ids.Contains(x.Id)).ToList();
+
+// Update existing ones.
+var existingSetInBatch = new List<Product>();
+foreach(var existing in existingSetFromDb)
+{
+    var update = batch.First(x => x.Id.Equals(existing.Id, StringComparison.OrdinalIgnoreCase));
+    existing.UpdateFrom(update);
+    existingSetInBatch.Add(update);
+}
+
+// Add new ones.
+context.Products.AddRange(batch.Except(existingSetInBatch));
+
+context.SaveChanges();
+
+
+
+
+
+
+
+
+
+QueryProducts(context);

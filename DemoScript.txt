@@ -30,7 +30,7 @@ Stijn tests with EF Core and 1000 products.
 
 Wim: Now we're talking, I'll calculate whether that's sufficient.
 	I not only need to load products, but I need to monitor some statistics as well.
-	I'd like to how many products with a specific characteristics are active, so I'm sure the products are available on the site.
+	I'd like to know how many products with a specific characteristic are active, so I'm sure the products are available on the site.
 	Can you test querying this model for me please.
 
 Stijn: Take it easy, shouldn't be too hard, now that I have this cool new framework.
@@ -53,7 +53,7 @@ Wim explains what's happening and continues with slides
 
 DEMO 2: ORM abstraction
 =======================
-Wim: Stijn, I have a great idea, let's abstract to ORM so that we can use different toolsets for different user-stories.
+Wim: Stijn, I have a great idea, let's abstract the ORM so that we can use different toolsets for different user-stories.
 	I've seen some examples on Microsofts documentation site.
 
 Stijn: Hm, whenever you have great ideas, I become very sceptical.

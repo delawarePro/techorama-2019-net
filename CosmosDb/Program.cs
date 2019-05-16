@@ -27,12 +27,13 @@ namespace CosmosDb
 
         static async Task Main(string[] args)
         {
+            Console.WriteLine(typeof(Program).FullName);
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
             CosmosUri = config["cosmosUri"];
             CosmosKey = config["cosmosKey"];
-            const string dbName = "Techorama";
+            const string dbName = "Techorama"; // "Techorama" or "Techorama_HP"
             const string collectionName = "2019";
 
             var client = CreateDocumentClient();
