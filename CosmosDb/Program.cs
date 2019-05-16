@@ -39,10 +39,10 @@ namespace CosmosDb
             var collection = await RecreateCollection(client, dbName, collectionName);
             var bulkExecutor = await CreateBulkExecutor(collection);
 
-            await WriteAndReadProducts(bulkExecutor, 5000, 25);
+            await WriteProducts(bulkExecutor, 5000, 25);
         }
 
-        private static async Task WriteAndReadProducts(IBulkExecutor bulkExecutor, int nofProducts, int nofProperties)
+        private static async Task WriteProducts(IBulkExecutor bulkExecutor, int nofProducts, int nofProperties)
         {
             Console.WriteLine("Writing products...");
             var sw = Stopwatch.StartNew();
@@ -56,21 +56,6 @@ namespace CosmosDb
             Console.WriteLine($"Written {nofProducts} products with {nofProperties} properties in: {sw.Elapsed}");
             var rps = (nofProducts + nofProducts * nofProperties) / sw.Elapsed.TotalSeconds;
             Console.WriteLine($"That is {rps:0.##} records/s");
-
-            //Console.WriteLine("Reading products...");
-            //context.Products.FirstOrDefault();
-            //var counter = 0;
-            //sw.Restart();
-            //{
-            //    IList<Product> batch = null;
-            //    do
-            //    {
-            //        batch = context.Products.AsNoTracking().Include(x => x.Properties).OrderBy(x => x.Id).Skip(counter).Take(100).ToList();
-            //        counter += batch.Count;
-            //    } while (batch.Count == 100);
-            //}
-            //sw.Stop();
-            //Console.WriteLine($"Read {counter} products with {nofProperties} properties in: {sw.Elapsed}");
         }
 
         private static DocumentClient CreateDocumentClient()

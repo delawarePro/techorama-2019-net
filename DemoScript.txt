@@ -86,10 +86,32 @@ Wim: alright, if we use this abstraction, we can basically put anything we like 
 Wim continues with slides
 
 
-DEMO 3: Upsert sproc
-====================
+DEMO 3: Cosmos
+==============
 Wim: I just did some calculations and it seems that importing products with EF Core is still too slow.
 	If I calculate correctly, 800k would still almost take 2 hours.
+	I went to MS Build conference and they're saying CosmosDB is the solution 
+		for high-throughput and low-latency data access.
+	Stijn, could you please try that, so we can plug that in our abstraction whithout impacting the rest of the app?
+
+Stijn: I don't have to do any mapping and read-before-writes so that should be straigtforward.
+	Their API is a but clunky, but they're working on it.
+Stijn explains the cosmos code: product doc + partition
+	and demoes the performance on regular priced + HighPerf
+
+Wim: That's awesome, but there are some drawbacks as well.
+Wim continues with the slides.
+
+
+DEMO 4: Upsert sproc
+====================
+Wim: So Stijn, that last demo, how much this this cost me monthly.
+
+Stijn: Well... around 2500 EUR without multi region availability and there's no autoscaling OOTB.
+
+Wim: Are you kidding me?
+	And I'm paying 500 EUR for the SQL also.
+	Isn't there something smart you can do? After all you're the expert right?
 
 Stijn: You want to push the limits again...
 	Let me see what I can do.
@@ -100,8 +122,5 @@ Stijn explains the UpsertSproc.sql
 
 Wim: That's way better;
 	If I calculate this correctly, it would take about 15 minutes.
+	And it's a huge cost saver.
 Wim continues with the slides.
-
-
-DEMO 4: Cosmos
-==============

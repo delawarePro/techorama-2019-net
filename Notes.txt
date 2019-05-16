@@ -1,5 +1,5 @@
 SQL Server DB: 400: €504 / month
-Cosmos DB RU: 8700 < €504 / 30d
+Cosmos DB RU: 10k < €504 / 30d
 
 EF6
 - Write 100: 2.8s (840rps)
