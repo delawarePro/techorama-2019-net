@@ -1,0 +1,116 @@
+ORIGINAL
+========
+var results = context.Products
+    .Include(pd => pd.Properties)
+    .Where(pd => pd.Properties.Any(prop => prop.Name == "prop-20"
+        && prop.Value.StartsWith("Property value 20"))
+    )
+    .GroupBy(pd => pd.IsActive == null ? false : pd.IsActive)
+    .Select(g => new
+    {
+        Active = g.Key,
+        Count = g.Count()
+    })
+    .ToList();
+=> 30s
+
+
+IMPROVEMENT 1: Limit client side processing
+===========================================
+var results = context.Products
+    .Include(pd => pd.Properties)
+    .Where(pd => pd.Properties.Any(prop => prop.Name == "prop-20"
+        && prop.Value.StartsWith("Property value 20"))
+    )
+    .GroupBy(pd => pd.IsActive)
+    .Select(g => new
+    {
+        Active = g.Key,
+        Count = g.Count()
+    })
+    .ToList()
+    .GroupBy(x => x.Active.GetValueOrDefault(false))
+    .Select(g => new
+    {
+        Active = g.Key,
+        Count = g.Sum(x => x.Count)
+    })
+    .ToList();
+=> 12s
+
+
+IMPROVEMENT 2: Optimize StartsWith translation
+==============================================
+private static void QueryProducts(EFCoreContext context)
+{
+    var sw = Stopwatch.StartNew();
+
+    var results = context.Products
+        .Include(pd => pd.Properties)
+        .Where(pd => pd.Properties.Any(prop => prop.Name == "prop-20"
+            && EF.Functions.Like(prop.Value, "Property value 20%"))
+        )
+        .GroupBy(pd => pd.IsActive)
+        .Select(g => new
+        {
+            Active = g.Key,
+            Count = g.Count()
+        })
+        .ToList()
+        .GroupBy(x => x.Active.GetValueOrDefault(false))
+        .Select(g => new
+        {
+            Active = g.Key,
+            Count = g.Sum(x => x.Count)
+        })
+        .ToList();
+
+    Console.WriteLine($"Queried {results.Count} results in: {sw.Elapsed}");
+}
+=> 3.4s
+
+
+IMPROVEMENT 3: Use indexed view
+===============================
+IF OBJECT_ID ('dbo.FilteredProducts', 'view') IS NOT NULL  
+	DROP VIEW dbo.FilteredProducts
+GO  
+
+CREATE VIEW dbo.FilteredProducts
+WITH SCHEMABINDING  
+AS  
+	SELECT pp.ProductId
+	FROM dbo.ProductProperties pp 
+	WHERE pp.Name = 'prop-20'
+		AND pp.Value LIKE 'Property value 20%'
+GO
+
+CREATE UNIQUE CLUSTERED INDEX IDX_V1   
+    ON dbo.FilteredProducts(ProductId)
+GO  
+
+public class TestQueryModel
+{
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    public bool IsActive { get; set; }
+    public int Count { get; set; }
+}
+
+var results = context.TestQuery.FromSql(@"
+        SELECT g.IsActive, SUM(g.[Count]) AS Count
+        FROM
+	        (
+		        SELECT ISNULL(p.IsActive, 0) AS IsActive, COUNT(p.Id) AS Count
+		        FROM Products P
+		        WHERE EXISTS(
+			        SELECT TOP 1 fp.ProductId
+			        FROM FilteredProducts fp 
+			        WHERE fp.ProductId = p.Id
+		        )
+		        GROUP BY p.IsActive
+	        ) g
+        GROUP BY g.IsActive
+    ")
+    .ToList();
+=> 1.6s

@@ -15,6 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosDb", "CosmosDb\Cosmos
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7AD27C4A-076D-4A10-AFD6-D780001CD486}"
 	ProjectSection(SolutionItems) = preProject
+		Challenge.txt = Challenge.txt
 		Demo1Snippets.txt = Demo1Snippets.txt
 		Demo4Snippets.txt = Demo4Snippets.txt
 		DemoScript.txt = DemoScript.txt
