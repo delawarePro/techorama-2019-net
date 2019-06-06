@@ -18,7 +18,6 @@ var results = context.Products
 IMPROVEMENT 1: Limit client side processing
 ===========================================
 var results = context.Products
-    .Include(pd => pd.Properties)
     .Where(pd => pd.Properties.Any(prop => prop.Name == "prop-20"
         && prop.Value.StartsWith("Property value 20"))
     )
@@ -46,7 +45,6 @@ private static void QueryProducts(EFCoreContext context)
     var sw = Stopwatch.StartNew();
 
     var results = context.Products
-        .Include(pd => pd.Properties)
         .Where(pd => pd.Properties.Any(prop => prop.Name == "prop-20"
             && EF.Functions.Like(prop.Value, "Property value 20%"))
         )
